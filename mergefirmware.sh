@@ -6,9 +6,6 @@
 #
 #
 
-LINUX_FW_REL=("20211027" "20221216")
-LINUX_FW_PREFIX="linux-fw-"
-VOLUMIO_FW=("volumio-fw-brcm-nvram" "volumio-fw-brcm-b43" "volumio-fw-cfg80211")
 
 SRC="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 # check for whitespace in ${SRC} and exit for safety reasons

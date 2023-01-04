@@ -1,11 +1,11 @@
 # Build your own Volumio x86 linux kernel
 Copyright (c) 2022 Gé Koerkamp / ge.koerkamp@volum##.com
 
-## Intro
+## **Intro**
 This script is used for building the necessary x86 platform files, which includes kernel, firmware, scripts etc. It does NOT build an image.
 This is default set to kernel 6.1.y, but can be used to build files for 5.10.y, both used for Volumio 3, see the config.x86 in the config directory.
 
-## Prerequisites
+## **Prerequisites**
 
 This build process has been tested on Debia Buster (Debian 10), but should work on any Ubuntu >= 20.xy  
 You will need the following minimal packages:
@@ -17,17 +17,17 @@ build-essential bc kmod flex cpio libncurses5-dev libelf-dev libssl-dev bison rs
 ## History
 See at the end of this document.
 
-## Process
+## **Kernel Build Process**
 
 ### Clone the build repository
 
 ```
-git clone https://github.com/gkkpch/volumio-x86-build-kernel --depth 1
+git clone https://github.com/gkkpch/build-x86-platform --depth 1
 ```
 ### Run the build process
 
 ```
-cd volumio-x86-build-kernel
+cd build-x86-platform
 ./buildx86kernel.sh
 ```
 
@@ -48,6 +48,70 @@ Represent the location in the tree where you wish to add them by creating the co
 There is also an opportunity to change kernel configuration settings, using the menuconfig dialogue which will appear.
 Just exit when you have no changes. 
 Configuration modifications will be saved in ```/platform-x86/packages-buster/amd64-volumio-min..._defconfig``` and reused with future kernel compiles.
+
+## **Firmware Maintenance**
+
+There are two situations
+- you wish to add a particular new or missing firmware binary and leave the rest as is
+- you wish to add a complete new linux-firmware from kernel.org
+
+## Add a new or missing firmware binary
+
+Try to find out what is needed and then clone repo ```git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git```
+```
+cd firmware
+git clone git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git new-fw
+```
+This will give you the latest stable firmware repo in directory ```new-fw```.
+
+Unpack the current linux-firmware tarball in firmware (on 20230104 this was firmware-20231216).
+```
+cd firmware
+tar xfJ linux-fw-20221216.tar.xz
+```
+This gives you the current firmware tree in ```lib```.
+
+Locate the new firmware and place it at the exact same location in the current tree.
+Example:
+```
+cd firmware
+cp new-fw/rtlwifi/rtl8188efw.bin lib/firmware/rtlwifi
+```
+
+Create a new linux-firmware tarball, note the name and the different date.
+Only overwrite an existing one when you add something which was missing.
+```
+cd firmware
+tar cfJ linux-fw-20230104.tar.xz ./lib
+```
+Remove the temp folders
+```
+rm -r new-fw
+rm -r lib
+```
+
+In case you added new firmware (not missing stuff), open ```config/config.x86``` and add the date of the new firmware tarball (in this case "20230104") to the list of firmware releases.
+```
+LINUX_FW_REL=("20211027" "20221216" "20230104")
+```
+in both cases, start the merge script in the build-x86-platform root folder
+```
+./mergefirmware.sh
+```
+The new tarball will be copied to platform-x86
+
+## New firmware-linux from kernel.org
+
+This is a little trickier and more time-consuming.
+The firmware from kernel.org is too big to use as-is, it needs cutting out the unnecessary firmware.
+The best way to do this is to clone the firmware repo as shown above, but do this in a directory outside the build-x86-platform.
+
+Now comes to tedious part. Compare the contents of the current firmware tarball in firmware. On 20230104 this was ```linux-fw-20221216``` and start with removing all directories in the new firmware repo which are not in the current one, unless you are sure it is a new one that matters (graphics, wifi). 
+Do the same for the files in the root folder of the new firmware repo, keep the matching ones but also new binaries starting with "ar", "ath", "iwlwifi", "mt", "rt". When unsure, keep it.
+
+Then bring this new folder in a "lib/firmware" structure (like the current one) and pack it to a tarball linux-fw-<dat>.tar.xz, where date is kernel.org's release date (should be visible when doing a ```git tag -l``` (it is the last one).
+
+Add the new date to config/config.x86 and start the merge (see above)
 
 ## History
 

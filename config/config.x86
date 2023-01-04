@@ -9,6 +9,10 @@ PATCHDIR="${SRC}"/patches
 PLATFORMREPO="https://github.com/volumio/platform-x86"
 PLATFORMDIR="${SRC}"/platform-x86/packages-buster
 
+LINUX_FW_REL=("20211027" "20221216")
+LINUX_FW_PREFIX="linux-fw-"
+VOLUMIO_FW=("volumio-fw-brcm-nvram" "volumio-fw-brcm-b43" "volumio-fw-cfg80211")
+
 export INSTALL_MOD_STRIP=1
 export LOCALVERSION=-volumio
 
