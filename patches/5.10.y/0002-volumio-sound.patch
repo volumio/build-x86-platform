@@ -1,0 +1,21 @@
+diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
+index 6333a2ecb848..dd4b5bcaf604 100644
+--- a/sound/usb/quirks.c
++++ b/sound/usb/quirks.c
+@@ -406,7 +406,7 @@ static int create_autodetect_quirks(struct snd_usb_audio *chip,
+ }
+ 
+ /*
+- * Create a stream for an Edirol UA-700/UA-25/UA-4FX interface.  
++ * Create a stream for an Edirol UA-700/UA-25/UA-4FX interface.
+  * The only way to detect the sample rate is by looking at wMaxPacketSize.
+  */
+ static int create_uaxx_quirk(struct snd_usb_audio *chip,
+@@ -1813,6 +1813,7 @@ u64 snd_usb_interface_dsd_format_quirks(struct snd_usb_audio *chip,
+ 	case 0x152a:  /* Thesycon devices */
+ 	case 0x20b1:  /* XMOS based devices */
+ 	case 0x22d9:  /* Oppo */
++  case 0x22e8:  /* Cambridge */
+ 	case 0x23ba:  /* Playback Designs */
+ 	case 0x25ce:  /* Mytek devices */
+ 	case 0x278b:  /* Rotel? */
