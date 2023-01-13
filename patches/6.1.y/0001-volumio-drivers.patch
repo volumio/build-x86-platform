@@ -7,9 +7,7 @@ index 4a1f0e64df03..3a906e83fc42 100644
  
  if WLAN_VENDOR_REALTEK
 -
-+source "drivers/net/wireless/realtek/rtl8188eu/Kconfig"
 +source "drivers/net/wireless/realtek/rtl8723du/Kconfig"
-+source "drivers/net/wireless/realtek/rtl8812au/Kconfig"
 +source "drivers/net/wireless/realtek/rtl8821cu/Kconfig"
 +source "drivers/net/wireless/realtek/rtl88x2bu/Kconfig"
  source "drivers/net/wireless/realtek/rtl818x/Kconfig"
@@ -24,9 +22,7 @@ index ab25419f56c6..a9823b5663f5 100644
  # Makefile for the Linux Wireless network device drivers for Realtek units
  #
 -
-+obj-$(CONFIG_RTL8188EU)	+= rtl8188eu/
 +obj-$(CONFIG_RTL8723DU)	+= rtl8723du/
-+obj-$(CONFIG_88XXAU)    += rtl8812au/
 +obj-$(CONFIG_RTL8821CU)	+= rtl8821cu/
 +obj-$(CONFIG_RTL8822BU)	+= rtl88x2bu/
  obj-$(CONFIG_RTL8180)		+= rtl818x/

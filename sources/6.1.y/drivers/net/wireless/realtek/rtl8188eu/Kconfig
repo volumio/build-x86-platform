@@ -1,6 +1,0 @@
-config RTL8188EU
-	tristate "Realtek RTL8188EU USB WiFi"
-	depends on USB
-	help
-	  Say Y or M in case you want support for these drivers
-
