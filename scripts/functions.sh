@@ -44,19 +44,23 @@ clean_previous_builds() {
     rm $PLATFORMDIR/amd64*${KVERPREV}*_defconfig
   fi
   set -- $PLATFORMDIR/linux-*${KVERPREV}*.deb
-  if [ "$1" ]; then
+  if [ -f "$1" ]; then
     rm $PLATFORMDIR/linux-*${KVERPREV}*.deb
   fi
+
 }
 
 get_latest_kernel() {
 
-  log "Cleaning the kernel repo"
-  git clean -qdfx
-  git checkout -qf HEAD
-
   log "Getting the latest kernel version"
-  git pull
+  if [[ ! $KERNELBRANCH =~ "-rc" ]]; then
+    log "Cleaning the kernel repo"
+    git clean -qdfx
+    git checkout -qf HEAD
+    git pull
+  else
+    log "$KERNELBRANCH is a release candidate, up-to-date"
+  fi  
 
   KVER=$(cat Makefile| grep "^VERSION = " | awk -F "= " '{print $2}')
   KPATCH=$(cat Makefile| grep -e "^PATCHLEVEL = " | awk -F "= " '{print $2}')
@@ -64,9 +68,9 @@ get_latest_kernel() {
   KERNELVER=${KVER}.$KPATCH.$KSUB$LOCALVERSION
 
   log "Current versions"
-  log "Kernel version ${KVER}" "info"
-  log "Kernel patch ${KPATCH}" "info"
-  log "Kernel sub version ${KSUB}" "info"
+  log "Kernel version ${KVER}" "cfg"
+  log "Kernel patch ${KPATCH}" "cfg"
+  log "Kernel sub version ${KSUB}" "cfg"
 
   echo 1 > .version
   log "Package version $KERNELVER-$(<.version)" "info"
@@ -74,10 +78,13 @@ get_latest_kernel() {
 }
 
 add_additional_sources() {
-  log "Adding additional sources"
-pwd
-  log "Adding additional kernel sources"
-  cp -dR ${SRC}/sources/${KERNELBRANCH}/* .
+  log "Checking custom additions"
+  if [ ! -d ${SRC}/sources/${KERNELBRANCH} ] ; then
+    log "No custom kernel sources found" "wrn"
+  else
+    log "Adding additional kernel sources" "info"
+    cp -dR ${SRC}/sources/${KERNELBRANCH}/* .
+  fi
 
   log "Adding the default amd64-volumio-min kernel configuration" "info"
   if [ -f ${PLATFORMDIR}/${KERNELCONFIG} ]; then
@@ -85,7 +92,7 @@ pwd
   else
     set -- $PLATFORMDIR/amd64-volumio-min*
     if [ -f "$1" ]; then
-      log "Kernel configuration file does not exist, copy from last compiled kernel configuration"
+      log "Custom kernel configuration file does not exist, copy from last compiled kernel configuration"
       cp ${PLATFORMDIR}/amd64-volumio-min*_defconfig ${KERNELDIR}/arch/x86/configs/${KERNELCONFIG}
     else
       log "Default kernel configuration not found, aborting" "err"
@@ -96,13 +103,16 @@ pwd
 
 add_user_patches() {
 
-  log "Applying accumulative kernel patches"
-  for f in ${PATCHDIR}/${KERNELBRANCH}/*
-    do
-    log "Appying $f" "info"
-    git apply $f
-  done
-
+  if [ ! -d ${SRC}/patches/${KERNELBRANCH} ] ; then
+    log "No custom patches found" "wrn"
+  else
+    log "Applying accumulative kernel patches"
+    for f in ${PATCHDIR}/${KERNELBRANCH}/*
+      do
+      log "Appying $f" "info"
+      git apply $f
+    done
+  fi
 }
 
 kernel_config() {
@@ -123,7 +133,7 @@ compile_kernel() {
   cp defconfig $PLATFORMDIR/amd64-volumio-min-${KERNELVER}-`date +%Y.%m.%d-%H.%M`_defconfig
   cp defconfig $PLATFORMDIR/amd64-volumio-min-${KERNELBRANCH}_defconfig
 
-  echo "Compiling the kernel"
+  echo "Compiling kernel ${KERNELVER}"
   start=$(date +%s.%N)
   make -j$(nproc) deb-pkg
   dur=$(echo "$(date +%s.%N) - $start" | bc)

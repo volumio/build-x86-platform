@@ -27,7 +27,11 @@ add_user_patches
 log "Now ready for additional sources and patches" "Info"
 read -p "Press [Enter] key to resume ..."
 
-git diff > $PATCHDIR/${KERNELBRANCH}/0001-custom-volumio.patch
+if [[ ! $KERNELBRANCH =~ "-rc" ]]; then
+  git diff > $PATCHDIR/${KERNELBRANCH}/0001-custom-volumio.patch
+else
+  log "${KERNELBRANCH} is a release candidate, no patches to be saved" "info"
+fi
 
 kernel_config
 

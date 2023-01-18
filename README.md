@@ -49,6 +49,12 @@ There is also an opportunity to change kernel configuration settings, using the 
 Just exit when you have no changes. 
 Configuration modifications will be saved in ```/platform-x86/packages-buster/amd64-volumio-min..._defconfig``` and reused with future kernel compiles.
 
+## Add support for a Release Candidate kernel
+tbs
+
+## Adding support for a new major kernel
+tbs
+
 ## **Firmware Maintenance**
 
 There are two situations
@@ -125,7 +131,7 @@ Add the new date to config/config.x86 and start the merge (see above)
 |20230104|gkkpch|Moved firmware files from platform-x86 to ./firmware
 |||Merged the 4 different tarballs into a single firmware tarball, script ```mergefirmware.sh``` added.  
 |TODO|TODO|Remove the remainders in platform-x86 once the build recipe modification have been merged 
-|||
+|20230118|gkkpch|Support release candidate kernels
 
 
 
