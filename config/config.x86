@@ -1,8 +1,11 @@
 #!/bin/bash
 
 KERNELREPO="git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git"
-KERNELDIR="${SRC}"/linux-stable
+
+#KERNELBRANCH="5.10.y"
 KERNELBRANCH="6.1.y"
+#KERNELBRANCH="6.2-rc4"
+KERNELDIR="${SRC}"/linux-${KERNELBRANCH}
 KERNELCONFIG="amd64-volumio-min-${KERNELBRANCH}_defconfig"
 
 PATCHDIR="${SRC}"/patches

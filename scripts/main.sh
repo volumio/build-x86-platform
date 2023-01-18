@@ -6,7 +6,6 @@ log "KERNELDIR: ${KERNELDIR}" "cfg"
 log "PATCHDIR: ${PATCHDIR}" "cfg"
 log "PLATFORMDIR: ${PLATFORMDIR}" "cfg"
 
-
 log "KERNELREPO: ${KERNELREPO}" "cfg"
 log "KERNELBRANCH: ${KERNELBRANCH}" "cfg"
 log "LOCALVERSION: ${LOCALVERSION}" "cfg"
@@ -25,13 +24,10 @@ add_additional_sources
 
 add_user_patches
 
-
 log "Now ready for additional sources and patches" "Info"
 read -p "Press [Enter] key to resume ..."
 
-git diff drivers > $PATCHDIR/${KERNELBRANCH}/0001-volumio-drivers.patch
-git diff sound > $PATCHDIR/${KERNELBRANCH}/0002-volumio-sound.patch
-git diff > $PATCHDIR/last-volumio.patch
+git diff > $PATCHDIR/${KERNELBRANCH}/0001-custom-volumio.patch
 
 kernel_config
 

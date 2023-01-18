@@ -3,7 +3,7 @@
 get_kernel_repo() {
 if [ ! -d  $KERNELDIR ]; then
   log "Kernel directory does not exist, cloning from kernel.org"
-  git clone ${KERNELREPO} -b linux-${KERNELBRANCH}
+  git clone ${KERNELREPO} ${KERNELDIR} -b linux-${KERNELBRANCH}
 fi
 }
 
