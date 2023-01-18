@@ -27,7 +27,7 @@ index ab25419f56c6..dec8f509213e 100644
  obj-$(CONFIG_RTL8187)		+= rtl818x/
  obj-$(CONFIG_RTLWIFI)		+= rtlwifi/
 diff --git a/drivers/usb/Kconfig b/drivers/usb/Kconfig
-index 578a439e71b5..988df5e20092 100644
+index 578a439e71b5..f4b13d823bcf 100644
 --- a/drivers/usb/Kconfig
 +++ b/drivers/usb/Kconfig
 @@ -166,6 +166,8 @@ source "drivers/usb/atm/Kconfig"
@@ -39,15 +39,8 @@ index 578a439e71b5..988df5e20092 100644
  source "drivers/usb/phy/Kconfig"
  
  source "drivers/usb/gadget/Kconfig"
-@@ -174,4 +176,4 @@ source "drivers/usb/typec/Kconfig"
- 
- source "drivers/usb/roles/Kconfig"
- 
--endif # USB_SUPPORT
-+endif # USB_SUPPORT
-\ No newline at end of file
 diff --git a/drivers/usb/Makefile b/drivers/usb/Makefile
-index 643edf5fe18c..8c6d4809dcf7 100644
+index 643edf5fe18c..cbdc91db0d4a 100644
 --- a/drivers/usb/Makefile
 +++ b/drivers/usb/Makefile
 @@ -50,6 +50,8 @@ obj-$(CONFIG_USB_MICROTEK)	+= image/
@@ -59,15 +52,8 @@ index 643edf5fe18c..8c6d4809dcf7 100644
  obj-$(CONFIG_USB)		+= misc/
  obj-$(CONFIG_EARLY_PRINTK_USB)	+= early/
  
-@@ -65,4 +67,4 @@ obj-$(CONFIG_USBIP_CORE)	+= usbip/
- 
- obj-$(CONFIG_TYPEC)		+= typec/
- 
--obj-$(CONFIG_USB_ROLE_SWITCH)	+= roles/
-+obj-$(CONFIG_USB_ROLE_SWITCH)	+= roles/
-\ No newline at end of file
 diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
-index 3d13fdf7590c..e74a602981d0 100644
+index 3d13fdf7590c..fd96eff19f73 100644
 --- a/sound/usb/quirks.c
 +++ b/sound/usb/quirks.c
 @@ -2176,6 +2176,8 @@ static const struct usb_audio_quirk_flags_table quirk_flags_table[] = {
