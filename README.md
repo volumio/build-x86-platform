@@ -38,28 +38,73 @@ After cloning/ updating the kernel and platform repos and applying volumio patch
 [ .. ] Now ready for additional sources and patches [ Info ]
 ```
 At this point further patches can be made in the kernel tree.  
-Kernel patches are accumulated in ```./patches/volumio-kernel.patch```.  
+Kernel patches are accumulated in ```./patches/<major-kernelversion>/0001-custom-volumio.patch```.  
 When you're ready, or did not have any patches, press [Enter]
 
-**Note** Currently, additional files are not automatically saved, you need to copy these into the build repo's sources folder.
-Represent the location in the tree where you wish to add them by creating the corresponding directory tree structure.
+### Additional kernel sources
+Currently, custom files are not automatically saved, you need to copy these into the build repo's sources folder: ```./sources/<major-kernelversion>/```.  
+This needs to have same file structure as the corresponding kernel tree.  
+For an example, see ```./sources/6.1.y```.
 
 ### Kernel configuration
-There is also an opportunity to change kernel configuration settings, using the menuconfig dialogue which will appear.
-Just exit when you have no changes. 
+There is also an opportunity to change kernel configuration settings, using the menuconfig dialogue which will appear.  
+Just exit when you have no changes.  
 Configuration modifications will be saved in ```/platform-x86/packages-buster/amd64-volumio-min..._defconfig``` and reused with future kernel compiles.
 
 ## Add support for a Release Candidate kernel
-tbs
+Release Candidate kernels are not part of the ```linux-stable``` repo.  
+The compilation of such a kernel requires
+* manuallly download the tarbal from http://kernel.org
+* unzipping the tarbal into the corresponding kernel folder, example ```./linux-6.2-rc4```
+* modification of ```./config/x86.conf```
+    * comment the current kernel branch
+    ```
+    #KERNELBRANCH="6.1.y"
+    ```
+
+    * add a new one, e.g.
+    ```
+    KERNELBRANCH="6.2-rc4"
+    ```
+For the sources and patches, follow the instructions below (support for a new kernel).    
+**Important** Omit any custom sources or patches in case it is used for bugzilla reporting.
+Start the build process.
 
 ## Adding support for a new major kernel
-tbs
+* Create the new ```./sources/<kernelbranch>``` folder.
+* Create the new ```./patches/<kernelbranch>``` folder.
+* Copy the custom sources from a **previous** ```./sources/<major-kernelversion/``` (the closest version you have) to the new patches folder.
+* Copy the custom patches from the corresponding previous ```./patches/<major-kernelversion>/``` to the new patches folder. 
+* modify ```./config/x86.conf```
+    * comment the current kernel branch
+    ```
+    #KERNELBRANCH="6.1.y"
+    ```
+
+    * add a new one, e.g.
+    ```
+    KERNELBRANCH="6.2.y"
+    ```
+* Start the build process.
+
+Be aware, that patching or compiling may not work.
+* in case patches do not apply
+    * the build process will have stopped at 
+    ```
+    Now ready for additional sources and patches
+    Press [Enter] key to resume ...
+    ```
+    * fix the failed patch manually (it can be mismatched a few lines in case the source was changed in the new kernel version)
+* in case the kernel does not apply because of errors in custom sources  
+Consult the internet and apply the necessary fixes, this is not always trivial  
+With the wireless drivers, refer to the README.md file in the corresponding ```./sources``` folder.  
+        The repo owners may already have created patches.
 
 ## **Firmware Maintenance**
 
 There are two situations
-- you wish to add a particular new or missing firmware binary and leave the rest as is
-- you wish to add a complete new linux-firmware from kernel.org
+* you wish to add a particular new or missing firmware binary and leave the rest as is
+* you wish to add a complete new linux-firmware from kernel.org
 
 ## Add a new or missing firmware binary
 
