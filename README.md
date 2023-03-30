@@ -169,16 +169,17 @@ Add the new date to config/config.x86 and start the merge (see above)
 |Date|Author|Change
 |---|---|---|
 |20220218|gkkpch|Initial version
-|20220404|gkkpch|Use for kernel 5.10.y with github.com/volumio/platform-x86 
-|20230103|gkkpch|Add kernel 6.1.y support
-|||Add support for Realtek RTL88x2BU/ RTL8812AU/ RTL8814AU/ RTL8821AU
+|20220404|gkkpch|Use for kernel 5.10.y LTS with github.com/volumio/platform-x86 
+|20230103|gkkpch|Add kernel 6.1.y LTS support
+|||Add support for Realtek RTL88x2BU/ RTL8821CU/ RTL8723DU
 |||Add support for i2c-cht341-usb
 |20230104|gkkpch|Moved firmware files from platform-x86 to ./firmware
 |||Merged the 4 different tarballs into a single firmware tarball, script ```mergefirmware.sh``` added.  
 |TODO|TODO|Remove the remainders in platform-x86 once the build recipe modification have been merged 
-|20230118|gkkpch|Support release candidate kernels
-
-
+|20230118|gkkpch|Support future release candidate kernels for testing
+|20230330|gkkpch|Kernel 6.1.y LTS: bump to version 6.1.22
+|||Kernel 6.1.y LTS: add wireless support for RTL8812AU
+|||Kernel 6.1.y LTS: add BT support for Ugreen BT 5.0 (VID/PID: 0x2b89:0x8761)
 
 <br />
 <br />

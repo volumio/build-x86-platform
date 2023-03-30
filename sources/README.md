@@ -14,3 +14,6 @@ A summary.
 - http://github.com/morrownr/8821cu-20210118  
     Cloned into rtl8821cu
 
+**rtl8812au**  
+- Armbian build patches
+
