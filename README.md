@@ -11,7 +11,7 @@ This build process has been tested on Debia Buster (Debian 10), but should work 
 You will need the following minimal packages:
 
 ```
-build-essential bc kmod flex cpio libncurses5-dev libelf-dev libssl-dev bison rsync libncurses-dev
+build-essential bc kmod flex cpio libncurses5-dev libelf-dev libssl-dev bison rsync libncurses-dev debhelper
 ```
 
 ## History
@@ -31,7 +31,7 @@ cd build-x86-platform
 ./buildx86kernel.sh
 ```
 
-### Patching
+## **Patching**
 
 After cloning/ updating the kernel and platform repos and applying volumio patches, the build process comes to a break-point and displays:
 ```
@@ -51,11 +51,14 @@ There is also an opportunity to change kernel configuration settings, using the 
 Just exit when you have no changes.  
 Configuration modifications will be saved in ```/platform-x86/packages-buster/amd64-volumio-min..._defconfig``` and reused with future kernel compiles.
 
-## Add support for a Release Candidate kernel
+## **Add support for the current Release Candidate kernel**
 Release Candidate kernels are not part of the ```linux-stable``` repo.  
 The compilation of such a kernel requires
-* manuallly download the tarbal from http://kernel.org
-* unzipping the tarbal into the corresponding kernel folder, example ```./linux-6.2-rc4```
+* manually clone the current kernel repo after checking the current rc name (e.g. 6.3-rc7):
+```
+git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git linux-6.3-rc7
+```
+
 * modification of ```./config/x86.conf```
     * comment the current kernel branch
     ```
@@ -64,17 +67,22 @@ The compilation of such a kernel requires
 
     * add a new one, e.g.
     ```
-    KERNELBRANCH="6.2-rc4"
+    KERNELBRANCH="6.3-rc7"
     ```
-For the sources and patches, follow the instructions below (support for a new kernel).    
-**Important** Omit any custom sources or patches in case it is used for bugzilla reporting.
-Start the build process.
 
-## Adding support for a new major kernel
+Next you need to create a kernel configuration file for the ```-rc``` kernel.
+Copy the last known ```amd64-volumio-min..._defconfig``` and name it (as an example) ```amd64-volumio_min_6.3-rc7_defconfig```.   
+
+For the sources and patches, follow the instructions below (support for a new kernel).
+
+**Important** Omit any custom sources or patches in case it is used for bugzilla reporting.
+
+## **Add support for a new major kernel**
+It is advised to use LTS kernels whenever possible. Once Volumio is working with an LTS version, you will have years of support to come. This kernel build process will keep maintenance effort to a minimum.
 * Create the new ```./sources/<kernelbranch>``` folder.
 * Create the new ```./patches/<kernelbranch>``` folder.
 * Copy the custom sources from a **previous** ```./sources/<major-kernelversion/``` (the closest version you have) to the new patches folder.
-* Copy the custom patches from the corresponding previous ```./patches/<major-kernelversion>/``` to the new patches folder. 
+    * Note: Some of the existing patches for Wireless Drivers may not apply anymore. Kernels 6.2.y and 6.3-rc7 already include more Realtek chip support. As an example,  RTL8822BU is supported out-of-the-box (and a few more). Please check for duplicates by comparing the ```Kconfig``` files in Realtek folders like ```rtw88``` and ```rtw99```. Just copy the remaining custom patches. 
 * modify ```./config/x86.conf```
     * comment the current kernel branch
     ```
@@ -180,6 +188,10 @@ Add the new date to config/config.x86 and start the merge (see above)
 |20230330|gkkpch|Kernel 6.1.y LTS: bump to version 6.1.22
 |||Kernel 6.1.y LTS: add wireless support for RTL8812AU
 |||Kernel 6.1.y LTS: add BT support for Ugreen BT 5.0 (VID/PID: 0x2b89:0x8761)
+|||Kernel 5.10.y LTS: pulling version 5.10.178 
+|||Kernel 6.1.y LTS: pulling version 6.1.25
+|||Kernel 6.1.y LTS: patch to re-enable touchscreen on Toshiba Satellite Mini Click"
+
 
 <br />
 <br />
