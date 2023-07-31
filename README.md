@@ -3,11 +3,12 @@ Copyright (c) 2022, 2023 Gé Koerkamp / volumio@bluewin.ch
 
 ## **Intro**
 This script is used for building the necessary x86 platform files, which includes kernel, firmware, scripts etc. It does NOT build an image.
-This is default set to kernel 6.1.y, but can be used to build files for 5.10.y, both used for Volumio 3, see the config.x86 in the config directory.
+This is default set to kernel 5.10.y, but can be used to build files for 6.1.y
+Both can be used for Volumio 3, see the config.x86 in the config directory.
 
 ## **Prerequisites**
 
-This build process has been tested on Debia Buster (Debian 10), but should work on any Ubuntu >= 20.xy  
+This build process has been tested on Debia Buster (Debian 10)and Ubuntu 22.04  
 You will need the following minimal packages:
 
 ```
