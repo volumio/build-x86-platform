@@ -1,53 +1,8 @@
-diff --git a/drivers/acpi/power.c b/drivers/acpi/power.c
-index f2588aba8421..957a4c548d0f 100644
---- a/drivers/acpi/power.c
-+++ b/drivers/acpi/power.c
-@@ -23,6 +23,7 @@
- 
- #define pr_fmt(fmt) "ACPI: PM: " fmt
- 
-+#include <linux/dmi.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/init.h>
-@@ -1022,6 +1023,22 @@ void acpi_resume_power_resources(void)
- }
- #endif
- 
-+static const struct dmi_system_id dmi_leave_unused_power_resources_on[] = {
-+	{
-+		/*
-+		 * The Toshiba Click Mini has a CPR3 power-resource which must
-+		 * be on for the touchscreen to work, but which is not in any
-+		 * _PR? lists. The other 2 affected power-resources are no-ops.
-+		 */
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "SATELLITE Click Mini L9W-B"),
-+		},
-+	},
-+	{}
-+};
-+
-+
- /**
-  * acpi_turn_off_unused_power_resources - Turn off power resources not in use.
-  */
-@@ -1029,6 +1046,9 @@ void acpi_turn_off_unused_power_resources(void)
- {
- 	struct acpi_power_resource *resource;
- 
-+	if (dmi_check_system(dmi_leave_unused_power_resources_on))
-+		return;
-+
- 	mutex_lock(&power_resource_list_lock);
- 
- 	list_for_each_entry_reverse(resource, &acpi_power_resource_list, list_node) {
 diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 90b85dcb138d..951263d1bbe6 100644
+index faad19b396d5..c3defa96034f 100644
 --- a/drivers/bluetooth/btusb.c
 +++ b/drivers/bluetooth/btusb.c
-@@ -635,6 +635,8 @@ static const struct usb_device_id blacklist_table[] = {
+@@ -638,6 +638,8 @@ static const struct usb_device_id blacklist_table[] = {
  						     BTUSB_WIDEBAND_SPEECH },
  	{ USB_DEVICE(0x7392, 0xc611), .driver_info = BTUSB_REALTEK |
  						     BTUSB_WIDEBAND_SPEECH },
@@ -113,7 +68,7 @@ index 643edf5fe18c..cbdc91db0d4a 100644
  obj-$(CONFIG_EARLY_PRINTK_USB)	+= early/
  
 diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
-index 3ecd1ba7fd4b..75f7869fbe4c 100644
+index 6cf55b7f7a04..28ec8941b40a 100644
 --- a/sound/usb/quirks.c
 +++ b/sound/usb/quirks.c
 @@ -2178,6 +2178,10 @@ static const struct usb_audio_quirk_flags_table quirk_flags_table[] = {
@@ -122,7 +77,7 @@ index 3ecd1ba7fd4b..75f7869fbe4c 100644
  		   QUIRK_FLAG_DSD_RAW),
 +	VENDOR_FLG(0x22e1, /* TempoTec Sonata BHD */
 +		   QUIRK_FLAG_DSD_RAW),
-+    VENDOR_FLG(0x22e8,  /* Cambridge */
++	VENDOR_FLG(0x22e8,  /* Cambridge */
 +		   QUIRK_FLAG_DSD_RAW),
  	VENDOR_FLG(0x23ba, /* Playback Design */
  		   QUIRK_FLAG_CTL_MSG_DELAY | QUIRK_FLAG_IFACE_DELAY |
@@ -133,6 +88,6 @@ index 3ecd1ba7fd4b..75f7869fbe4c 100644
  		   QUIRK_FLAG_DSD_RAW),
 +	VENDOR_FLG(0x2fc6, /* E1DA #9038D  */
 +		   QUIRK_FLAG_DSD_RAW),
- 	VENDOR_FLG(0x3353, /* Khadas devices */
+ 	VENDOR_FLG(0x3336, /* HEM devices */
  		   QUIRK_FLAG_DSD_RAW),
- 	VENDOR_FLG(0x3842, /* EVGA */
+ 	VENDOR_FLG(0x3353, /* Khadas devices */

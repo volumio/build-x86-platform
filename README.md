@@ -191,6 +191,8 @@ Add the new date to config/config.x86 and start the merge (see above)
 |||Kernel 5.10.y LTS: pulling version 5.10.178 
 |||Kernel 6.1.y LTS: pulling version 6.1.25
 |||Kernel 6.1.y LTS: patch to re-enable touchscreen on Toshiba Satellite Mini Click"
+|20230731|gkkpch|Kernel 6.1.y LTS: remove previous touchscreen patch (now obsolete)
+|||Kernel 6.1.y LTS: adapt usb audio patch to fit modified quirks.c
 
 
 <br />
