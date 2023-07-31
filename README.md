@@ -1,5 +1,5 @@
 # Build your own Volumio x86 linux kernel
-Copyright (c) 2022 Gé Koerkamp / ge.koerkamp@volum##.com
+Copyright (c) 2022, 2023 Gé Koerkamp / volumio@bluewin.ch
 
 ## **Intro**
 This script is used for building the necessary x86 platform files, which includes kernel, firmware, scripts etc. It does NOT build an image.
