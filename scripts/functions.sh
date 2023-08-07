@@ -129,30 +129,55 @@ kernel_config() {
 }
 
 compile_kernel() {
-  echo "Copying volumio kernel config to platform folder (history)"
+
+  log "Copying volumio kernel config to platform folder (history)"
   cp defconfig $PLATFORMDIR/amd64-volumio-min-${KERNELVER}-`date +%Y.%m.%d-%H.%M`_defconfig
   cp defconfig $PLATFORMDIR/amd64-volumio-min-${KERNELBRANCH}_defconfig
 
-  echo "Compiling kernel ${KERNELVER}"
+  log "Compiling kernel ${KERNELVER}"
   start=$(date +%s.%N)
   make -j$(nproc) deb-pkg
-  dur=$(echo "$(date +%s.%N) - $start" | bc)
-  log "$(printf \"Execution time: %.6f seconds\n\" $dur)"
-
 }
 
 move_to_storage() {
 
-log "Backup .deb files"
-#cp ../linux-headers-${KERNELVER}_*amd64*.deb $PLATFORMDIR
-#cp ../linux-image-${KERNELVER}_*amd64*.deb $PLATFORMDIR
+  log "Keep local copies"
+  cp ../linux-headers-${KERNELVER}_*amd64*.deb ../local-debs/linux-headers-${KERNELVER}_local_amd64.deb
+  cp ../linux-image-${KERNELVER}_*amd64*.deb ../local-debs/linux-image-${KERNELVER}_local_amd64.deb
 
-rsync --remove-source-files -rq ../*.deb "$PLATFORMDIR"
-find ../ -maxdepth 1 -type f -name 'linux-*' -delete
+  HEADERS=$(ls ../linux-headers-${KERNELVER}_*amd64*.deb)
+  IMAGE=$(ls ../linux-image-${KERNELVER}_*amd64*.deb)
 
+  log "Check if .deb packages were compressed with ZSTD, re-pack it for usage with Debian 10" "info"
+  # if one is zstd compressed, all are (Ubuntu >= 21.04, Debian >= 12)
+  ar -x $HEADERS
+  if [ -f "control.tar.zst" ]; then
 
-log "Build kernel completed" "okay"
+    log "Re-packing $HEADERS"
+    # Uncompress zstd files an re-compress them using xz
+    zstd -d < control.tar.zst | xz -v > control.tar.xz
+    zstd -d < data.tar.zst | xz -v > data.tar.xz
+    rm $HEADERS
+    ar r $HEADERS debian-binary control.tar.xz data.tar.xz
+    rm debian-binary control.tar.xz data.tar.xz control.tar.zst data.tar.zst
 
-cd ..
+    log "Re-packing $IMAGE"
+    ar -x $IMAGE
+    zstd -d < control.tar.zst | xz -v > control.tar.xz
+    zstd -d < data.tar.zst | xz -v > data.tar.xz
+    rm $IMAGE
+    ar r $IMAGE debian-binary control.tar.xz data.tar.xz
+    rm debian-binary control.tar.xz data.tar.xz control.tar.zst data.tar.zst
+  fi
 
+  log "Backup .deb files"
+  rsync --remove-source-files -rq ../*.deb "$PLATFORMDIR"
+  find ../ -maxdepth 1 -type f -name 'linux-*' -delete
+
+  log "Build kernel completed" "okay"
+  dur=$(echo "$(date +%s.%N) - $start" | bc)
+  log "$(printf 'Execution time: %.6f seconds\n' $dur)"
+  
+  log "Manually remove the .deb copies from the local-debs folder when not needed" "info"
+  cd ..
 }
