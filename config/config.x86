@@ -2,8 +2,8 @@
 
 KERNELREPO="git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git"
 
-KERNELBRANCH="5.10.y"
-#KERNELBRANCH="6.1.y"
+#KERNELBRANCH="5.10.y"
+KERNELBRANCH="6.1.y"
 KERNELDIR="${SRC}"/linux-${KERNELBRANCH}
 KERNELCONFIG="amd64-volumio-min-${KERNELBRANCH}_defconfig"
 
@@ -11,7 +11,7 @@ PATCHDIR="${SRC}"/patches
 PLATFORMREPO="https://github.com/volumio/platform-x86"
 PLATFORMDIR="${SRC}"/platform-x86/packages-buster
 
-LINUX_FW_REL=("20211027" "20221216")
+LINUX_FW_REL=("20211027" "20221216" "20230804")
 LINUX_FW_PREFIX="linux-fw-"
 VOLUMIO_FW=("volumio-fw-brcm-nvram" "volumio-fw-brcm-b43" "volumio-fw-cfg80211")
 

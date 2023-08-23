@@ -142,6 +142,7 @@ compile_kernel() {
 move_to_storage() {
 
   log "Keep local copies"
+  [ -d ../local-debs ] || mkdir ../local-debs
   cp ../linux-headers-${KERNELVER}_*amd64*.deb ../local-debs/linux-headers-${KERNELVER}_local_amd64.deb
   cp ../linux-image-${KERNELVER}_*amd64*.deb ../local-debs/linux-image-${KERNELVER}_local_amd64.deb
 
