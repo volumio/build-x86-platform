@@ -2,9 +2,9 @@
 Copyright (c) 2022, 2023 Gé Koerkamp / volumio@bluewin.ch
 
 ## **Intro**
-This script is used for building the necessary x86 platform files, which includes kernel, firmware, scripts etc. It does NOT build an image.
-This is default set to kernel 5.10.y, but can be used to build files for 6.1.y
-Both can be used for Volumio 3, see the config.x86 in the config directory.
+This script is used for building the necessary x86 platform files, which includes kernel, firmware, scripts etc. It does NOT build an image.  
+This is default set to kernel 6.1.y, but can still be used to build platform files with kernel 5.10.y  
+See the config.x86 in the config directory.
 
 ## **Prerequisites**
 
@@ -195,9 +195,9 @@ Add the new date to config/config.x86 and start the merge (see above)
 |20230731|gkkpch|Kernel 6.1.y LTS: remove previous touchscreen patch (now obsolete)
 |||Kernel 6.1.y LTS: adapt usb audio patch to fit modified quirks.c
 |20230807|gkkpch|Ubuntu >=21.04 compresses .deb files with zstd. Repack them with xz compressed files, otherwise they cannot be processed with Volumio's build server with Debian 10
-|20230823|gkkpch|Switched to kernel 6.1.y LTS as default
-|||Kernel 5.10.y: bumped to 5.10.191
-|||Kernel 6.1 y LTS: bumped to 6.1.47
+|20230828|gkkpch|Switched to kernel 6.1.y LTS as default
+|||Kernel 5.10.y: bumped to 5.10.192
+|||Kernel 6.1 y LTS: bumped to 6.1.49
 |||Firmware: added version from 20230804
 <br />
 <br />
