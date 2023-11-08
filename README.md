@@ -199,7 +199,8 @@ Add the new date to config/config.x86 and start the merge (see above)
 |||Kernel 5.10.y: bumped to 5.10.192
 |||Kernel 6.1 y LTS: bumped to 6.1.49
 |||Firmware: added version from 20230804
-20231030|gkkpch|Preparations for kernel 6.6.y (waiting for 6.6.y LTS)
+|20231030|gkkpch|Preparations for kernel 6.6.y (waiting for 6.6.y LTS)
+|20231108|gkkpch|Kernel 6.1 y LTS: bumped to 6.1.62
 <br />
 <br />
 <br />

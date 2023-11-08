@@ -1,5 +1,5 @@
 diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index d6f405763c56..406495e87359 100644
+index 96d4f48e3601..e2635c098388 100644
 --- a/drivers/bluetooth/btusb.c
 +++ b/drivers/bluetooth/btusb.c
 @@ -641,6 +641,8 @@ static const struct usb_device_id blacklist_table[] = {
@@ -27,17 +27,17 @@ index 4a1f0e64df03..64235d5526af 100644
  source "drivers/net/wireless/realtek/rtlwifi/Kconfig"
  source "drivers/net/wireless/realtek/rtl8xxxu/Kconfig"
 diff --git a/drivers/net/wireless/realtek/Makefile b/drivers/net/wireless/realtek/Makefile
-index ab25419f56c6..1c7b443954e3 100644
+index ab25419f56c6..c2b13980039c 100644
 --- a/drivers/net/wireless/realtek/Makefile
 +++ b/drivers/net/wireless/realtek/Makefile
 @@ -3,6 +3,10 @@
  # Makefile for the Linux Wireless network device drivers for Realtek units
  #
  
-+obj-$(CONFIG_88XXAU)	+= rtl8812au/
-+obj-$(CONFIG_RTL8723DU)	+= rtl8723du/
-+obj-$(CONFIG_RTL8821CU)	+= rtl8821cu/
-+obj-$(CONFIG_RTL8822BU)	+= rtl88x2bu/
++obj-$(CONFIG_88XXAU)		+= rtl8812au/
++obj-$(CONFIG_RTL8723DU)		+= rtl8723du/
++obj-$(CONFIG_RTL8821CU)		+= rtl8821cu/
++obj-$(CONFIG_RTL8822BU)		+= rtl88x2bu/
  obj-$(CONFIG_RTL8180)		+= rtl818x/
  obj-$(CONFIG_RTL8187)		+= rtl818x/
  obj-$(CONFIG_RTLWIFI)		+= rtlwifi/
@@ -68,10 +68,10 @@ index 643edf5fe18c..cbdc91db0d4a 100644
  obj-$(CONFIG_EARLY_PRINTK_USB)	+= early/
  
 diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
-index 6cf55b7f7a04..28ec8941b40a 100644
+index f458328f9ec4..b583bb5a3d03 100644
 --- a/sound/usb/quirks.c
 +++ b/sound/usb/quirks.c
-@@ -2178,6 +2178,10 @@ static const struct usb_audio_quirk_flags_table quirk_flags_table[] = {
+@@ -2205,6 +2205,10 @@ static const struct usb_audio_quirk_flags_table quirk_flags_table[] = {
  		   QUIRK_FLAG_DSD_RAW),
  	VENDOR_FLG(0x22d9, /* Oppo */
  		   QUIRK_FLAG_DSD_RAW),
@@ -82,9 +82,9 @@ index 6cf55b7f7a04..28ec8941b40a 100644
  	VENDOR_FLG(0x23ba, /* Playback Design */
  		   QUIRK_FLAG_CTL_MSG_DELAY | QUIRK_FLAG_IFACE_DELAY |
  		   QUIRK_FLAG_DSD_RAW),
-@@ -2191,6 +2195,8 @@ static const struct usb_audio_quirk_flags_table quirk_flags_table[] = {
+@@ -2222,6 +2226,8 @@ static const struct usb_audio_quirk_flags_table quirk_flags_table[] = {
  		   QUIRK_FLAG_DSD_RAW),
- 	VENDOR_FLG(0x2ab6, /* T+A devices */
+ 	VENDOR_FLG(0x2d87, /* Cayin device */
  		   QUIRK_FLAG_DSD_RAW),
 +	VENDOR_FLG(0x2fc6, /* E1DA #9038D  */
 +		   QUIRK_FLAG_DSD_RAW),
