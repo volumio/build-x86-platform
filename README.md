@@ -196,11 +196,13 @@ Add the new date to config/config.x86 and start the merge (see above)
 |||Kernel 6.1.y LTS: adapt usb audio patch to fit modified quirks.c
 |20230807|gkkpch|Ubuntu >=21.04 compresses .deb files with zstd. Repack them with xz compressed files, otherwise they cannot be processed with Volumio's build server with Debian 10
 |20230828|gkkpch|Switched to kernel 6.1.y LTS as default
-|||Kernel 5.10.y: bumped to 5.10.192
+|||Kernel 5.10.y: bumped to 5.10.192, frozen as of 20231208
 |||Kernel 6.1 y LTS: bumped to 6.1.49
 |||Firmware: added version from 20230804
 |20231030|gkkpch|Preparations for kernel 6.6.y (waiting for 6.6.y LTS)
-|20231108|gkkpch|Kernel 6.1 y LTS: bumped to 6.1.62
+|20231108|gkkpch|Kernel 6.1 y LTS: bumped to 6.1.62, frozen as of 20231208
+|20231208|gkkpch|Kernel 6.6.y LTS: bumped to 6.6.5
+|||Moved to Volumio repo
 <br />
 <br />
 <br />
@@ -208,4 +210,5 @@ Add the new date to config/config.x86 and start the merge (see above)
 <sub> January 2023/ Gé koerkamp
 <br />ge.koerkamp@gmail.com
 <br />04.01.2023 v1.0
+<br />08.12.2023 v1.1
 
