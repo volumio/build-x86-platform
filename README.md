@@ -29,28 +29,38 @@ git clone https://github.com/gkkpch/build-x86-platform --depth 1
 
 ```
 cd build-x86-platform
-./buildx86kernel.sh
+./mkplatform.sh
 ```
 
 ## **Patching**
 
-After cloning/ updating the kernel and platform repos and applying volumio patches, the build process comes to a break-point and displays:
-```
-[ .. ] Now ready for additional sources and patches [ Info ]
-```
-At this point further patches can be made in the kernel tree.  
-Kernel patches are accumulated in ```./patches/<major-kernelversion>/0001-custom-volumio.patch```.  
-When you're ready, or did not have any patches, press [Enter]
+**```config.x86 parameter PATCH_KERNEL```**  
+When set to "yes" (active), the build process will only support kernel patching.  
+Kernel configuration and compiling will not be done as long as the patch parameter is active.
 
-### Additional kernel sources
-Currently, custom files are not automatically saved, you need to copy these into the build repo's sources folder: ```./sources/<major-kernelversion>/```.  
-This needs to have same file structure as the corresponding kernel tree.  
-For an example, see ```./sources/6.1.y```.
+After cloning/ updating the kernel, platform repos and after applying volumio patches, the build process reaches a break-point and displays:
+```
+[ .. ] Now ready for additional sources and patches
+[ .... ] Workfolder <workfolder> will be used to create the patch file
+[ .... ] Press [Enter] key to resume ...
+```
+At this point new patches can be made in the kernel tree.  
+When you're ready, or did not have any patches, press ```[Enter]```.  
+* Without patches, the process ends here.  
+* With patches, you will be prompted to enter a name for a patch file, which will also be used as a commit message. Please use a meaningfull name, refer to the existing patch names as examples.   
+The patch will automatically be prefixed with a sequence number (the highest existing prefix number, incremented by 1).  
+You can change/ correct the name later, but please do not change the sequence number. The sequence number ensures that patches are applied in the correct order.  
+Check the patch and when correct, move it to the ```build-x86-platform/patch``` folder.  From here the patch will be used in the kernel build process. Patches (still) in the work folder have no effect.  
+You can clear the work folder afterwards.  
+
+### New kernel sources
+
+Keep these in folder ```build-x86-platform/sources``` for later reference, grouped by kernel version.
 
 ### Kernel configuration
-There is also an opportunity to change kernel configuration settings, using the menuconfig dialogue which will appear.  
-Just exit when you have no changes.  
-Configuration modifications will be saved in ```/platform-x86/packages-buster/amd64-volumio-min..._defconfig``` and reused with future kernel compiles.
+**```config.x86 parameter CONFIGURE_KERNEL```**  
+When set to "yes". the kernel configuration settings can be modified, the menuconfig dialogue will appear.  
+Configuration modifications will be saved in ```/platform-x86/packages-buster/amd64-volumio-min-<kernelbranch>_defconfig``` and reused with future kernel compiles.
 
 ## **Add support for the current Release Candidate kernel**
 Release Candidate kernels are not part of the ```linux-stable``` repo.  
@@ -76,7 +86,7 @@ Copy the last known ```amd64-volumio-min..._defconfig``` and name it (as an exam
 
 For the sources and patches, follow the instructions below (support for a new kernel).
 
-**Important** Omit any custom sources or patches in case it is used for bugzilla reporting.
+**Important** Custom patches will not be allowed.
 
 ## **Add support for a new major kernel**
 It is advised to use LTS kernels whenever possible. Once Volumio is working with an LTS version, you will have years of support to come. This kernel build process will keep maintenance effort to a minimum.
@@ -84,7 +94,11 @@ It is advised to use LTS kernels whenever possible. Once Volumio is working with
 * Create the new ```./patches/<kernelbranch>``` folder.
 * Copy the custom sources from a **previous** ```./sources/<major-kernelversion/``` (the closest version you have) to the new patches folder.
     * Note: Some of the existing patches for Wireless Drivers may not apply anymore. Kernels 6.2.y and 6.3-rc7 already include more Realtek chip support. As an example,  RTL8822BU is supported out-of-the-box (and a few more). Please check for duplicates by comparing the ```Kconfig``` files in Realtek folders like ```rtw88``` and ```rtw99```. Just copy the remaining custom patches. 
-* modify ```./config/x86.conf```
+    * re-apply the patches one-by-one, set the PATCH_KERNEL parameter in config.x86 for that purpose. Use the existing patches and sources from the older release as reference. Be aware, that patching or compiling may not always work.
+    * some may be mismatched a few lines in case the source was changed in the new kernel version.
+    * in case the patch does not apply anymore because of errors in custom sources, consult the internet and apply the necessary fixes or replace the patch & source. This is not always trivial.  
+
+* Modify ```./config/x86.conf```
     * comment the current kernel branch
     ```
     #KERNELBRANCH="6.1.y"
@@ -96,18 +110,7 @@ It is advised to use LTS kernels whenever possible. Once Volumio is working with
     ```
 * Start the build process.
 
-Be aware, that patching or compiling may not work.
-* in case patches do not apply
-    * the build process will have stopped at 
-    ```
-    Now ready for additional sources and patches
-    Press [Enter] key to resume ...
-    ```
-    * fix the failed patch manually (it can be mismatched a few lines in case the source was changed in the new kernel version)
-* in case the kernel does not apply because of errors in custom sources  
-Consult the internet and apply the necessary fixes, this is not always trivial  
-With the wireless drivers, refer to the README.md file in the corresponding ```./sources``` folder.  
-        The repo owners may already have created patches.
+
 
 ## **Firmware Maintenance**
 
@@ -196,11 +199,15 @@ Add the new date to config/config.x86 and start the merge (see above)
 |||Kernel 6.1.y LTS: adapt usb audio patch to fit modified quirks.c
 |20230807|gkkpch|Ubuntu >=21.04 compresses .deb files with zstd. Repack them with xz compressed files, otherwise they cannot be processed with Volumio's build server with Debian 10
 |20230828|gkkpch|Switched to kernel 6.1.y LTS as default
-|||Kernel 5.10.y: bumped to 5.10.192
+|||Kernel 5.10.y: bumped to 5.10.192, frozen as of 20231208
 |||Kernel 6.1 y LTS: bumped to 6.1.49
 |||Firmware: added version from 20230804
 |20231030|gkkpch|Preparations for kernel 6.6.y (waiting for 6.6.y LTS)
-|20231108|gkkpch|Kernel 6.1 y LTS: bumped to 6.1.62
+|20231108|gkkpch|Kernel 6.1 y LTS: bumped to 6.1.62, frozen as of 20231208
+|20231208|gkkpch|Kernel 6.6.y LTS: bumped to 6.6.5
+|||Moved to Volumio repo
+|20231220|gkkpch|Documented the re-factored patching process
+
 <br />
 <br />
 <br />
@@ -208,4 +215,5 @@ Add the new date to config/config.x86 and start the merge (see above)
 <sub> January 2023/ Gé koerkamp
 <br />ge.koerkamp@gmail.com
 <br />04.01.2023 v1.0
+<br />08.12.2023 v1.1
 
